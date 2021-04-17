@@ -6,6 +6,7 @@ Vue.config.productionTip = false
 
 let data = {
 	spellHistory: [],
+	user: null,
 }
 
 new Vue({

@@ -1,57 +1,60 @@
 <template>
 	<div id="spells">
 	<div class='mainContent'>
-		<form @submit.prevent="addSchool">
-			<input type="text" v-model="schoolName">
-			<button type="submit">Add a School</button>
-		</form>
-		<br/>
-		<span class='school' v-for="school in schools" :key=school.id>
-			| <button :class="{ selected: active(school) }" @click=selectSchool(school)>{{school.name}}</button>
-			<button :class="{ selected: active(school) }" @click=deleteSchool(school)>X</button> |
-		</span>
-		<br/>
-		<hr/>
-		<br/>
-		<div v-if="school">
-			<div id="input1">
-				<label><strong>Enter a Spell Name: </strong></label>
-				<input id="dndInput" type="text" v-model='dndSpell'><br/>
+		<div v-if="user">
+			<p>You can only modify spells and delete schools you have created.</p>
+			
+			<form @submit.prevent="addSchool">
+				<input type="text" v-model="schoolName">
+				<button type="submit">Add a School</button>
+			</form>
+			<br/>
+			<span class='school' v-for="school in schools" :key=school.id>
+				<span class='individualSchool'>
+				<button :class="{ selected: active(school) }" @click=selectSchool(school)>{{school.name}}</button>
+				<button v-if="verifyUser(school)" :class="{ selected: active(school) }" @click=deleteSchool(school)>X</button>
+				</span>
+			</span>
+			<br/>
+			<hr/>
+			<br/>
+			<div v-if="school">
+				<div id="input1">
+					<label><strong>Enter a Spell Name: </strong></label>
+					<input id="dndInput" type="text" v-model='dndSpell'><br/>
+					
+					<div class='orderedFloat'>
+						<label><strong>Enter a Spell Description: </strong></label>
+						<textarea v-model='spellDesc'></textarea><br/>
+					</div>
 				
-				<div class='orderedFloat'>
-					<label><strong>Enter a Spell Description: </strong></label>
-					<textarea v-model='spellDesc'></textarea><br/>
+					<button id="dndSubmit" v-on:click="addSpell()">Submit</button>
 				</div>
-			
-				<button id="dndSubmit" v-on:click="addSpell()">Submit</button>
-			</div>
-			<div id="selectExplanation">
-				<p>Enter the name of a D&D spell, or make up a spell.</p>
-				<p>Examples: Acid Arrow, Fireball, Fire Bolt, Fly, Sanctuary</p>
-			</div>
-			
-			<div class="spells">
-				<div class="spell" v-for="spell in spells" :key="spell.id">
-					<div class="info">
-						<input type='text' class="spellTitle" v-model="spell.title" size='80'>
-						<br/>
-						<textarea class="spellDesc" v-model="spell.description" rows="4" cols="110"></textarea>
-						<button v-on:click="editSpell(spell)">Edit Spell</button>
-						<button v-on:click="deleteSpell(spell)">Delete Spell</button>
+				<div id="selectExplanation">
+					<p>Enter the name of a D&D spell, or make up a spell. You may only edit spells you've created.</p>
+					<p>Examples: Acid Arrow, Fireball, Fire Bolt, Fly, Sanctuary</p>
+				</div>
+				
+				<div class="spells">
+					<div class="spell" v-for="spell in spells" :key="spell.id">
+						<div class="info">
+							<input type='text' class="spellTitle" v-model="spell.title" size='80'>
+							<br/>
+							<textarea class="spellDesc" v-model="spell.description" rows="4" cols="110"></textarea>
+							<button v-on:click="editSpell(spell)">Edit Spell</button>
+							<button v-on:click="deleteSpell(spell)">Delete Spell</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<div v-else>
+			<p>You can only add spells and schools if you're logged in!</p>
+		</div>
 	</div>
 		
 		
-		<br/>
-		<br/>
-		<br/>
-		<br/>
-		<div class='footer'>
-			<p><a href='https://github.com/VoidDead/creativeproject4'>https://github.com/VoidDead/creativeproject4</a></p>
-		</div>
+		
 	</div>
 </template>
 
@@ -75,6 +78,11 @@
 		created() {
 			this.getSchools();
 		},
+		computed: {
+			user() {
+				return this.$root.$data.user;
+			},
+		},
 		methods: 
 		{
 			async addSchool() {
@@ -94,6 +102,7 @@
 						description: this.spellDesc,
 					});
 					this.spellDesc = "";
+					this.spellTitle = "";
 					this.getSpells();
 				} catch (error) {
 					console.log(error);
@@ -154,6 +163,14 @@
 			showCompleted() {
 				this.show = 'completed';
 			},
+			verifyUser(item) {
+				if (item.user === this.user._id) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			},
 		},
 	}
 </script>
@@ -161,8 +178,8 @@
 <style scoped>
 
 button.selected {
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #000;
+  border-top: 2px solid #F00;
+  border-bottom: 2px solid #F00;
 }
 
 .orderedFloat {
@@ -171,6 +188,13 @@ button.selected {
 	flex-wrap:wrap;
 	flex-direction:row;
 	align-items: center;
+}
+
+.individualSchool {
+	border: solid 2px #000;
+	padding: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 
 </style>

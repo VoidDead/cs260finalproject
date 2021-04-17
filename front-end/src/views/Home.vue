@@ -4,42 +4,26 @@
 		<div class='mainContent'>
 			<h1>Special Spells</h1>
 	
-			<p>This is a website for mystical, magical spells. You can add spells in the 'Add Spells' page, using D&D spells or by making your own spells. You can then view the spells here.</p>
-	
-			<div class='school'>
-				<button :class="{ selected: active(school) }" v-for="school in schools" :key=school.id @click=selectSchool(school)>{{school.name}}</button>
-			</div>
-			<br/>
-			<div v-if="school">
-				<div class="spells">
-					<div class="spell" v-for="spell in spells" :key="spell.id">
-						<div class="info">
-							<h1>{{spell.title}}</h1>
-							<p>{{spell.description}}</p>
-						</div>
-					</div>
-				</div>
-			</div>
+			<p>This is a website for mystical, magical spells. You can add spells in the 'Add Spells' page, using D&D spells or by making your own spells. You can view all spells here.</p>
+			
+			<SpellBrowser />
 	
 		</div>
 	
-		<br/>
-		<br/>
-		<br/>
-		<br/>
-		<div class='footer'>
-			<p><a href='https://github.com/VoidDead/creativeproject4'>https://github.com/VoidDead/creativeproject4</a></p>
-		</div>
 	</div>
 </template>
 
 <script>
 // @ is an alias to /src
 import axios from 'axios';
+import SpellBrowser from '@/components/SpellBrowser.vue'
 
 export default 
 	{
 		name: 'Home',
+		components: {
+			SpellBrowser,
+		},
 		data() {
 			return {
 				spellDesc: '',
@@ -150,8 +134,8 @@ body {
 }
 
 button.selected {
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #000;
+  border-top: 2px solid #F00;
+  border-bottom: 2px solid #F00;
 }
 
 .spell {

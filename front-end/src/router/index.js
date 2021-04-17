@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Spells from '../views/Spells.vue'
 import CharacterCreator from '../views/CharacterCreator.vue'
+import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/spells',
     name: 'Spells',
     component: Spells
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
 ]
 
